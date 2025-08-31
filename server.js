@@ -1,7 +1,4 @@
-// server.js
 import express from 'express';
-import path, { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -18,37 +15,28 @@ dotenv.config();
 
 const app = express();
 
-// Fix __dirname in ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Middleware
+// Allow requests from your frontend domain
 app.use(cors({
-  origin: "https://www.dlcproperties.in",  // frontend domain
+  origin: "https://www.dlcproperties.in",   // your frontend domain
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
 app.use(express.json());
 
-// Serve React static files
-app.use(express.static(join(__dirname, "build")));
+app.get('/', (req, res) => {
+  res.send('API is Running');
+});
 
-// API routes
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/userPurchase', userPurchaseRoutes);
-app.use('/api/orders', orderRoutes);
+app.use('/api/userPurchase',userPurchaseRoutes);
+app.use('/api/orders',orderRoutes);
 app.use("/api/customers", CustomerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-// Fallback to React for client-side routing
-app.get("*", (req, res) => {
-  res.sendFile(join(__dirname, "build", "index.html"));
-});
 
-// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("MongoDB Connection Failed", err));
