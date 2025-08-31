@@ -16,8 +16,24 @@ dotenv.config();
 const app = express();
 
 // Allow requests from my frontend domain
+
+const allowedOrigins = [
+  "https://www.dlcproperties.in",
+  "https://dlcproperties.in",
+  "http://localhost:5173" // if testing locally
+];
+
 app.use(cors({
-  origin: "https://www.dlcproperties.in" || "https://dlcproperties.in",   // my frontend domain
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
