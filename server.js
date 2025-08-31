@@ -14,6 +14,10 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 dotenv.config();
 
 const app = express();
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Allowed origins for CORS
 const allowedOrigins = [
@@ -46,10 +50,7 @@ app.get('/', (req, res) => {
   res.send('API is Running');
 });
 
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
+
 // API routes
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
