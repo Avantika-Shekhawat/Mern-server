@@ -15,7 +15,13 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Allow requests from your frontend domain
+app.use(cors({
+  origin: "https://dlcproperties.in",   // your frontend domain
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
