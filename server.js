@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -13,21 +15,20 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 
 dotenv.config();
 
-const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Allow requests from my frontend domain
+const app = express();
 
 const allowedOrigins = [
   "https://www.dlcproperties.in",
   "https://dlcproperties.in",
-  "http://localhost:5173" // if testing locally
+  "http://localhost:5173"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -40,20 +41,18 @@ app.use(cors({
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('API is Running');
-});
-
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/userPurchase',userPurchaseRoutes);
-app.use('/api/orders',orderRoutes);
+app.use('/api/userPurchase', userPurchaseRoutes);
+app.use('/api/orders', orderRoutes);
 app.use("/api/customers", CustomerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-app.use(()=>{
-  return window.location.href = "/home";
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 mongoose.connect(process.env.MONGO_URI)
