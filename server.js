@@ -15,48 +15,52 @@ dotenv.config();
 
 const app = express();
 
-// Allow requests from my frontend domain
-
+// Allowed origins for CORS
 const allowedOrigins = [
   "https://www.dlcproperties.in",
   "https://dlcproperties.in",
-  "http://localhost:5173" // if testing locally
+  "http://localhost:5173" // local testing
 ];
 
+// CORS configuration
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
+    if (!origin) return callback(null, true); // allow Postman or server-to-server
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // include PATCH
+  credentials: true // allow cookies/sessions
 }));
+
+// Handle preflight OPTIONS requests
+app.options('*', cors());
 
 app.use(express.json());
 
+// Simple test route
 app.get('/', (req, res) => {
   res.send('API is Running');
 });
 
+// API routes
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/userPurchase',userPurchaseRoutes);
-app.use('/api/orders',orderRoutes);
+app.use('/api/userPurchase', userPurchaseRoutes);
+app.use('/api/orders', orderRoutes);
 app.use("/api/customers", CustomerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("MongoDB Connection Failed", err));
 
+// Start server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
