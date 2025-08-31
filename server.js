@@ -42,10 +42,6 @@ app.use(cors({
 app.options('*', cors());
 
 
-
-// Handle preflight OPTIONS requests
-app.options('*', cors());
-
 app.use(express.json());
 
 // Simple test route
