@@ -8,6 +8,6 @@ const router = express.Router();
 router.post('/TotalPurchase', verifyToken, TotalPurchase);
 router.post('/ShippingDetails', verifyToken, ShippingDetails);
 router.get('/getDetail', verifyToken, getPurchaseDetails);
-router.patch('/confirm', verifyToken, confirmOrder);
+router.post('/confirm', verifyToken, confirmOrder);
 
 export default router;
