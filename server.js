@@ -17,7 +17,7 @@ const app = express();
 
 // Allow requests from my frontend domain
 app.use(cors({
-  origin: "https://www.dlcproperties.in",   // my frontend domain
+  origin: "https://www.dlcproperties.in" || "https://dlcproperties.in",   // my frontend domain
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
