@@ -106,6 +106,7 @@ export const getPurchaseDetails = async (req, res) => {
 export const confirmOrder = async (req, res) => {
   try {
     const UserId = req.user.id;
+    console.log("reached here but not to order ");
 
     // Step 1: Confirm the pending order
     const order = await userPurchaseModel.findOneAndUpdate(
@@ -113,6 +114,7 @@ export const confirmOrder = async (req, res) => {
       { $set: { Status: "Confirmed" } },
       { new: true }
     );
+     console.log("after order ");
 
     if (!order) {
       return res.status(404).json({ message: "No pending order found" });
