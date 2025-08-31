@@ -14,18 +14,6 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 dotenv.config();
 
 const app = express();
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
-
-// Allowed origins for CORS
-const allowedOrigins = [
-  "https://www.dlcproperties.in",
-  "https://dlcproperties.in",
-  "http://localhost:5173" // local testing
-];
-
 
 app.use(cors({
   origin: [
@@ -39,7 +27,6 @@ app.use(cors({
 }));
 
 // Preflight handling
-app.options('*', cors());
 
 
 app.use(express.json());

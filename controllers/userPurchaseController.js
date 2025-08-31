@@ -104,7 +104,7 @@ export const getPurchaseDetails = async (req, res) => {
 
 
 export const confirmOrder = async (req, res) => {
-  console.log("confirmOrder controller hit", req.user);
+ 
   try {
     const UserId = req.user.id;
 

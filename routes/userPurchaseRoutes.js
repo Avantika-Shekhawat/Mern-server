@@ -5,11 +5,6 @@ import { verifyToken } from '../middleware/verifyToken.js';
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-  console.log(`userPurchaseRoutes hit: ${req.method} ${req.path}`);
-  next();
-});
-
 router.post('/TotalPurchase', verifyToken, TotalPurchase);
 router.post('/ShippingDetails', verifyToken, ShippingDetails);
 router.get('/getDetail', verifyToken, getPurchaseDetails);
