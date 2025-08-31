@@ -26,8 +26,6 @@ const allowedOrigins = [
   "http://localhost:5173" // local testing
 ];
 
-// CORS configuration
-import cors from 'cors';
 
 app.use(cors({
   origin: [
