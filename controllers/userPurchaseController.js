@@ -107,6 +107,8 @@ export const confirmOrder = async (req, res) => {
   try {
     const UserId = req.user.id;
 
+    console.log("hello");
+
     // Step 1: Confirm the pending order
     const order = await userPurchaseModel.findOneAndUpdate(
       { UserId, Status: "Pending" },
