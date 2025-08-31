@@ -46,6 +46,10 @@ app.get('/', (req, res) => {
   res.send('API is Running');
 });
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 // API routes
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
