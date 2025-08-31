@@ -27,18 +27,23 @@ const allowedOrigins = [
 ];
 
 // CORS configuration
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman or server-to-server
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // include PATCH
-  credentials: true // allow cookies/sessions
-}));
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "https://www.dlcproperties.in",
+    "https://dlcproperties.in",
+    "http://localhost:5173"
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
 
 // Handle preflight OPTIONS requests
 app.options('*', cors());
