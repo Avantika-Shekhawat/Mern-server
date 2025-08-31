@@ -52,6 +52,9 @@ app.use('/api/orders',orderRoutes);
 app.use("/api/customers", CustomerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
+app.use(()=>{
+  return window.location.href = "/home";
+});
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
