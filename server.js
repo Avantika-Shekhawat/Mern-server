@@ -15,6 +15,9 @@ dotenv.config();
 
 const app = express();
 
+//demo for reload
+app.use(express.static(path.join(__dirname, "build")));
+
 // Allow requests from your frontend domain
 app.use(cors({
   origin: "https://www.dlcproperties.in",   // your frontend domain
@@ -35,6 +38,11 @@ app.use('/api/userPurchase',userPurchaseRoutes);
 app.use('/api/orders',orderRoutes);
 app.use("/api/customers", CustomerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+
+//demo fro reload
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 
 mongoose.connect(process.env.MONGO_URI)
