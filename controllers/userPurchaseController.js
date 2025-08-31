@@ -104,10 +104,9 @@ export const getPurchaseDetails = async (req, res) => {
 
 
 export const confirmOrder = async (req, res) => {
+  console.log("confirmOrder controller hit", req.user);
   try {
     const UserId = req.user.id;
-
-    console.log("hello");
 
     // Step 1: Confirm the pending order
     const order = await userPurchaseModel.findOneAndUpdate(

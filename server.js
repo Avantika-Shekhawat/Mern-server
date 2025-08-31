@@ -27,25 +27,22 @@ const allowedOrigins = [
 ];
 
 // CORS configuration
-app.use((req, res, next) => {
-  const allowedOrigins = [
+import cors from 'cors';
+
+app.use(cors({
+  origin: [
     "https://www.dlcproperties.in",
     "https://dlcproperties.in",
     "http://localhost:5173"
-  ];
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
+// Preflight handling
+app.options('*', cors());
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
-  next();
-});
 
 
 // Handle preflight OPTIONS requests
