@@ -29,7 +29,7 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -46,13 +46,13 @@ app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/userPurchase', userPurchaseRoutes);
 app.use('/api/orders', orderRoutes);
-app.use("/api/customers", CustomerRoutes);
-app.use("/api/dashboard", dashboardRoutes);
+app.use('/api/customers', CustomerRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 mongoose.connect(process.env.MONGO_URI)
@@ -60,7 +60,4 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log("MongoDB Connection Failed", err));
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
